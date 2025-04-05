@@ -1,13 +1,26 @@
 import React from 'react'
-import Hero from '../components/home/Hero';
-import SearchSection from '../components/home/SearchSection';
+
+import Navbar from "../compon_2/Navbar";
+import Hero from "../compon_2/Hero";
+import Features from "../compon_2/Features";
+import Testimonials from "../compon_2/Testimonials";
+import Footer from "../compon_2/Footer";
+import JobCategories from "../compon_2/JobCategories";
+import HowItWorks from "../compon_2/HowItWorks";
+import Recruiters from "../compon_2/Recruiters";
 
 const Home = () => {
     return (
-        <div>
+        <>
+            <Navbar />
             <Hero />
-            <SearchSection />            
-        </div>
+            <Features />
+            <JobCategories />
+            <HowItWorks />
+            <Recruiters />
+            <Testimonials />
+            <Footer />
+        </>
     );
 }
 

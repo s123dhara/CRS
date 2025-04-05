@@ -1,0 +1,33 @@
+src/
+├── assets/                 # Images, logos, fonts, etc.
+├── components/             # Reusable UI components (Buttons, Cards, etc.)
+│   └── common/             # Header, Footer, Navbar, etc.
+├── constants/              # Enums, app-wide constants
+├── context/                # React context (AuthContext, ThemeContext, etc.)
+├── hooks/                 # Custom hooks (useAuth, useFetch, etc.)
+├── layouts/               # Page layouts (AdminLayout, AuthLayout, etc.)
+├── pages/                 # Route-specific pages
+│   ├── Home/
+│   ├── Auth/              # Login/Register for Candidate/Company
+│   ├── Candidate/
+│   │   ├── Dashboard/
+│   │   ├── Profile/
+│   │   ├── Applications/
+│   ├── Company/
+│   │   ├── Dashboard/
+│   │   ├── CreateJob/
+│   │   ├── Applicants/
+│   └── Admin/             # (optional) Admin panel
+├── routes/                # All route configs (public/private route guards)
+├── services/              # API logic (axios clients per microservice)
+│   ├── authService.js
+│   ├── profileService.js
+│   ├── jobService.js
+│   ├── applicationService.js
+├── state/                 # Redux or Zustand store slices (if used)
+├── styles/                # Global CSS / Tailwind config
+├── types/                 # TypeScript types/interfaces (optional)
+├── utils/                 # Helper functions (dateFormat, validators, etc.)
+├── App.jsx
+├── main.jsx
+└── index.css
