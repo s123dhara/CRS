@@ -88,12 +88,15 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li className="pt-4">
-                                <a
-                                    href="javascript:void(0)"
+                                {/* <a
+                                    href=""
                                     className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center"
                                 >
                                     Employee Login
-                                </a>
+                                </a> */}
+                                <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md">
+                                    Employee Login
+                                </Link>
                             </li>
                             <li className="pt-2">
                                 <a
