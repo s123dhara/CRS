@@ -94,7 +94,7 @@ const Navbar = () => {
                                 >
                                     Employee Login
                                 </a> */}
-                                <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md">
+                                <Link to="/admin" className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center">
                                     Employee Login
                                 </Link>
                             </li>
