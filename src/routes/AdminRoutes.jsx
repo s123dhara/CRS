@@ -3,7 +3,7 @@ import { AdminLayout } from '../layout';
 import AdminDashboard from '../pages/AdminDashboard';
 
 export const AdminRoutes = () => (
-    <Route path="/admin" element={<AdminLayout />}>
+    <Route path="/dashboard" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
     </Route>
 );
