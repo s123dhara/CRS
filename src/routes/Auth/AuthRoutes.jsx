@@ -16,9 +16,9 @@ import SignupForm from '../../components/Admin/Auth/SignupForm'; // 👈 Import 
 export const AuthRoutes = () => (
     <Route path="/admin" element={<AuthLayout />}>
         {/* Login route: /admin/login */}
-        <Route path="login" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm />} />
 
         {/* Signup route: /admin/signup */}
-        <Route path="signup" element={<SignupForm />} />
+        <Route path="/signup" element={<SignupForm />} />
     </Route>
 );
