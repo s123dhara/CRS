@@ -1,17 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { PublicRoutes, AdminRoutes } from './routes';
+import { PublicRoutes, AdminRoutes, AuthRoutes } from './routes';
+import AppRoutes from './routes/AppRoutes';
 
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public/Main Layout */}        
-        {PublicRoutes()}
-
-        {/* Admin Layout */}
-        {AdminRoutes()}
-      </Routes>
+      <AppRoutes />
     </Router>
   );
 }
