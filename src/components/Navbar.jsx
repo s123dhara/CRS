@@ -94,14 +94,14 @@ const Navbar = () => {
                                 >
                                     Employee Login
                                 </a> */}
-                                <Link to="/admin" className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center">
+                                <Link to="/admin" className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center cursor-pointer">
                                     Employee Login
                                 </Link>
                             </li>
                             <li className="pt-2">
                                 <a
                                     href="javascript:void(0)"
-                                    className="block w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-center"
+                                    className="block w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-center cursor-pointer"
                                 >
                                     Application Login
                                 </a>
@@ -110,14 +110,11 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <div className="hidden md:flex space-x-3">
-                    {/* <a href="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md">
-                        Employee Login
-                    </a> */}
-                    <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md">
+                <div className="hidden md:flex space-x-3">                    
+                    <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
                         Employee Login
                     </Link>
-                    <a href="javascript:void(0)" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md">
+                    <a href="/admin/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
                         Candidate Login
                     </a>
                 </div>
