@@ -110,13 +110,13 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <div className="hidden md:flex space-x-3">                    
+                <div className="hidden md:flex space-x-3">
                     <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
                         Employee Login
                     </Link>
-                    <a href="/admin/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
+                    <Link to="/admin/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
                         Candidate Login
-                    </a>
+                    </Link>
                 </div>
             </div>
         </nav>
