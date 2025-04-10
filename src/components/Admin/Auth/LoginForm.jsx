@@ -1,16 +1,80 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getusers, loggin } from '../../../services/api'
+import { useAuth } from '../../../context/AuthContext'
+import axios from 'axios';
 
 export default function LoginForm() {
+    const navigate = useNavigate();
+    const auth = useAuth();
+    const initialUser = { "email": "", "password": "" }
+    const [user, setUser] = useState(initialUser)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(false)
 
-    const handleLogin = (e) => {
+    useEffect(() => {
+
+        setUser({ email, password });
+    }, [email, password])
+
+
+    const handleLogin = async (e) => {
         e.preventDefault();
+        // const res = await getusers();
+        // const res2 = await loggin(email, password);
+
+
+        setUser({ email, password });
+        try {
+            const data = await axios.post('http://localhost:3000/auth/admin/login', user, { withCredentials: true });
+            console.log(data);
+            navigate('/admin', { replace: true })
+        } catch (e) {
+            console.log(e);
+        }
+
+        // console.log(res2)
         console.log({ email, password, rememberMe });
+
     };
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     // setError(null);
+
+
+    //     try {
+    //         const res = await fetch('http://localhost:3000/auth/admin/login', {
+    //             method: 'POST',
+    //             credentials: 'include', // ⬅️ important for cookie auth!
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ email, password }),
+    //         });
+
+    //         const data = await res.json();
+
+    //         if (res.ok && data.statusCode === 201) {
+    //             console.log('Login successful', data);
+
+
+    //             navigate('/admin'); // 🔄 Redirect to protected area
+    //         } else {
+    //             console.error('Login failed:', data);
+    //             // setError(data.message || 'Invalid credentials');
+    //         }
+    //     } catch (err) {
+    //         console.error('Login error:', err);
+    //         // setError('Something went wrong. Please try again later.');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     return (
         <div className="w-full md:w-3/5 py-8 px-8 md:px-12">
