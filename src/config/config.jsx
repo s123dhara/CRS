@@ -1,7 +1,8 @@
-export const SystemConfig = () => {
-    const BACKEND_URL = import.meta.env.MODE === 'production'
-        ? '' // your production backend URL (can be set here)
-        : 'http://localhost:3000/';
+const SystemConfig = () => {
+    const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT || 5000;
+    const BACKEND_URI = import.meta.env.VITE_MODE === 'production' ? '' : `http://localhost:${BACKEND_PORT}/`;
 
-    return { BACKEND_URL };
+    return { BACKEND_URI };
 };
+
+export default SystemConfig;

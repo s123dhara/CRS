@@ -2,37 +2,32 @@ import axios from 'axios';
 import { useContext, createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Create API instance with base URL
-const api = axios.create({
-    baseURL: 'localhost:3000',
-    withCredentials: true // Important for cookie-based auth
-});
+import BACKEND_API from '../services/api';
 
-// Constants
-const TOKEN_KEYS = {
-    USER: 'userConfig',
-    ADMIN: 'adminConfig'
+
+// Authentication states
+const AUTH_STATES = {
+    LOGGED_OUT: 'LOGGED_OUT',          // Not logged in at all
+    PARTIAL_AUTH: 'PARTIAL_AUTH',      // Email/password verified but 2FA pending
+    FULLY_AUTHENTICATED: 'FULLY_AUTHENTICATED' // Completely authenticated
 };
-
-const ENDPOINTS = {
-    USER: '/user',
-    ADMIN: '/admin'
-};
-
 // Create context
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [authState, setAuthState] = useState(AUTH_STATES.LOGGED_OUT);
+    const [tempUser, setTempUser] = useState(null);
+
+    const [loggedUser, setLoggedUser] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [admin, setAdmin] = useState(null);
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [accessToken, setAccessToken] = useState(null);
+    const [twofaAuth, setTwofaAuth] = useState(false);
 
-    // Helper function to create auth headers
-    const createAuthHeader = (token) => ({
-        headers: { "Authorization": `Bearer ${token}` }
-    });
+
+
 
     // Helper to handle API errors
     const handleError = (err) => {
@@ -45,21 +40,31 @@ export const AuthProvider = ({ children }) => {
     // Login user
     const login = async (credentials) => {
         try {
-            setLoading(true);
-            setError(null);
-            const { data } = await api.post('/login', credentials);
+            // setLoading(true); // ✅ Start spinner
+            const response = await BACKEND_API.adminLogin(credentials);
 
-            if (data.success && data.data && data.data[0]?.token) {
-                localStorage.setItem(TOKEN_KEYS.USER, data.data[0].token);
-                setUser(data);
-                return { success: true, data };
-            } else {
-                throw new Error('Invalid response from server');
+            if (response.status && response.data.two_fa_auth_enabled) {
+                setAuthState(AUTH_STATES.PARTIAL_AUTH);
+                setTempUser(response.data.user);
+
+                return { status: true, requiresTwoFactor: true };
             }
-        } catch (err) {
-            return handleError(err);
+
+            if (response.status) {
+                setLoading(true);
+                setAccessToken(response.data.token);
+                setLoggedUser(response.data.user);
+                return { status: response.status, data: response.data };
+            } else {
+                setAccessToken(null);
+                setLoggedUser(null);
+                return { status: response.status, data: response.data };
+            }
+        } catch (e) {
+            console.log("Login Error:", e);
+            return false;
         } finally {
-            setLoading(false);
+            // setLoading(false); // ✅ Always stop spinner
         }
     };
 
@@ -72,7 +77,7 @@ export const AuthProvider = ({ children }) => {
 
             if (data.success && data.data && data.data[0]?.token) {
                 localStorage.setItem(TOKEN_KEYS.USER, data.data[0].token);
-                setUser(data);
+                setLoggedUser(data);
                 return { success: true, data };
             } else {
                 throw new Error('Invalid response from server');
@@ -85,25 +90,25 @@ export const AuthProvider = ({ children }) => {
     };
 
     // Admin login
-    const adminLogin = async (credentials) => {
-        try {
-            setLoading(true);
-            setError(null);
-            const { data } = await api.post('', credentials);
+    // const adminLogin = async (credentials) => {
+    //     try {
+    //         setLoading(true);
+    //         setError(null);
+    //         const { data } = await api.post('', credentials);
 
-            if (data.success && data.data && data.data[0]?.token) {
-                localStorage.setItem(TOKEN_KEYS.ADMIN, data.data[0].token);
-                setAdmin(data.data);
-                return { success: true, data };
-            } else {
-                throw new Error('Invalid admin response from server');
-            }
-        } catch (err) {
-            return handleError(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //         if (data.success && data.data && data.data[0]?.token) {
+    //             localStorage.setItem(TOKEN_KEYS.ADMIN, data.data[0].token);
+    //             setAdmin(data.data);
+    //             return { success: true, data };
+    //         } else {
+    //             throw new Error('Invalid admin response from server');
+    //         }
+    //     } catch (err) {
+    //         return handleError(err);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // Check admin authentication
     // const checkAdmin = async () => {
@@ -129,92 +134,133 @@ export const AuthProvider = ({ children }) => {
     //     }
     // };
 
-    const checkAdmin = async () => {
+    const enable2faAuth = async (MultifactorAuth, password) => {
+        const result = await BACKEND_API.enable2faAuth(MultifactorAuth, password);
+        if (result.status) {
+            console.log(result.data);
+        }
+
+        return result.data;
+    }
+
+    const disable2faAuth = async (MultifactorAuth, password) => {
+        const result = await BACKEND_API.disable2faAuth(MultifactorAuth, password);
+        if (result.status) {
+
+        }
+        return result.data;
+    }
+
+    const verifyAdminLoggedIn = async () => {
         try {
-            setLoading(true);
+            const result = await BACKEND_API.verifyAdminLoggedIn(getAccessTokenFromContext());
 
-            const { data } = await api.post('http://localhost:3000/auth/check', {
-                withCredentials: true, // 👈 important to send cookies
-            });
-            
-
-            if (data.isAuthenticated) {
-                setUser(data.user); // or setAdmin(data) if already the                 
+            if (result?.status && result.data?.isAuthenticated) {
+                setAuthState(AUTH_STATES.FULLY_AUTHENTICATED);
+                setAccessToken(result.data.token);
+                setLoggedUser(result.data.user);
             } else {
-                setAdmin(null);
+                setAccessToken(null);
+                setLoggedUser(null);
             }
         } catch (err) {
-            // Cookies.remove('access_token');
-            setUser(null);
-            // console.error('Admin verification failed:', err);
+            setAccessToken(null);
+            setLoggedUser(null);
         } finally {
             setLoading(false);
+        }
+
+        // if(setAccessToken != null) {
+        //     setLoggedUser({email : "sup"});
+        // }else {
+        //     setLoggedUser(null);
+        // }
+    }
+
+    const verify2fa = async (code, method) => {
+        try {
+
+            const response = await BACKEND_API.verify2fa(code, method, tempUser);
+            if (response.status) {
+                setLoading(true);
+                setAccessToken(response.data.token);
+                setLoggedUser(response.data.user);
+                return { status: response.status, data: response.data };
+            } else {
+                setAccessToken(null);
+                setLoggedUser(null);
+                return { status: response.status, data: response.data };
+            }
+
+        } catch (error) {
+
         }
     }
 
-    // Check user authentication
-    const checkUser = async () => {
-        const token = localStorage.getItem(TOKEN_KEYS.USER);
-        if (!token) return;
-
+    const init2fa = async (method) => {
         try {
-            setLoading(true);
-            const { data } = await api.get(ENDPOINTS.USER, createAuthHeader(token));
-            if (data.success && data.data) {
-                setUser(data);
+            const result = await BACKEND_API.init2fa(method, tempUser);
+            if (result.status) {
+                return { status: true };
             } else {
-                // Clear invalid user session
-                localStorage.removeItem(TOKEN_KEYS.USER);
-                setUser(null);
+                return { status: false };
             }
-        } catch (err) {
-            localStorage.removeItem(TOKEN_KEYS.USER);
-            setUser(null);
-            console.error('User verification failed:', err);
-        } finally {
-            setLoading(false);
+        } catch (error) {
+
         }
-    };
+    }
 
     // Log out user
     const logOut = async () => {
         try {
-            // Optional: Call logout endpoint to invalidate token on server
-            const token = localStorage.getItem(TOKEN_KEYS.USER);
-            if (token) {
-                await api.post('/logout', {}, createAuthHeader(token));
+            // await axios.post(`http://localhost:8000/auth/admin/logout`, {}, { withCredentials: true });
+            const result = await BACKEND_API.adminLogout();
+            console.log(result);
+
+            
+            if(result.status) {
+                setAuthState(AUTH_STATES.LOGGED_OUT);
+                setLoggedUser(null);
+                setLoading(true);
+
+                return {status : true, message : result.message};
             }
-        } catch (err) {
-            console.error('Logout error:', err);
-        } finally {
-            localStorage.removeItem(TOKEN_KEYS.USER);
-            setUser(null);
-            navigate('/', { replace: true });
+            // window.location.href = "/login"; // Redirect to login
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }finally {
+            setTimeout(() => {
+                setAccessToken(null);
+                setLoading(false);            
+            }, 800);
         }
     };
 
-    // Log out admin
-    const adminLogOut = async () => {
-        try {
-            // Optional: Call admin logout endpoint to invalidate token on server
-            const token = localStorage.getItem(TOKEN_KEYS.ADMIN);
-            if (token) {
-                await api.post('/admin/logout', {}, createAuthHeader(token));
-            }
-        } catch (err) {
-            console.error('Admin logout error:', err);
-        } finally {
-            localStorage.removeItem(TOKEN_KEYS.ADMIN);
-            setAdmin(null);
-            navigate('/admin', { replace: true });
+    const updateAccessToken = (token) => {
+        console.log('Setting the token  = ', token)
+        setAccessToken(token);
+    }
+
+
+    const getAccessTokenFromContext = () => {
+        console.log('Get Access token = ', accessToken)
+        return accessToken;
+    }
+
+    useEffect(() => {
+        if (accessToken) {
+            console.log('Access token updated:', accessToken);
+            verifyAdminLoggedIn(accessToken);
+        } else {
+            verifyAdminLoggedIn();
         }
-    };
+    }, [accessToken]);
 
     // Check authentication on mount
     useEffect(() => {
-        checkUser();
-        checkAdmin();
+        // verifyAdminLoggedIn();
     }, []);
+
 
     // Clear error after 5 seconds
     useEffect(() => {
@@ -226,21 +272,32 @@ export const AuthProvider = ({ children }) => {
 
     // Public API
     const value = {
-        user,
+        loggedUser,
         admin,
         error,
         loading,
         login,
         signUp,
-        adminLogin,
+        // adminLogin,
         logOut,
-        adminLogOut,
-        checkUser,
-        checkAdmin,
-        isAuthenticated: !!user,
-        isAdmin: !!admin
+        // adminLogOut,
+        // checkUser,
+        verifyAdminLoggedIn,
+        isAuthenticated: !!accessToken,
+        isAdmin: !!admin,
+        isLoggedIn: authState == AUTH_STATES.FULLY_AUTHENTICATED,
+        accessToken,
+        updateAccessToken,
+        getAccessTokenFromContext,
+        enable2faAuth,
+        disable2faAuth,
+        verify2fa,
+        init2fa,
+        tempUser,
+        isPartiallyAuthenticated: authState == AUTH_STATES.PARTIAL_AUTH
     };
 
+    console.log(value);
     return (
         <AuthContext.Provider value={value}>
             {children}

@@ -2,9 +2,11 @@
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useAuth } from "../../../context/AuthContext"
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const { loggedUser } = useAuth();
 
     const handleScroll = (id) => {
         document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
@@ -88,22 +90,22 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li className="pt-4">
-                                {/* <a
-                                    href=""
+                                <a
+                                    href="javascript:void(0)"
                                     className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center"
                                 >
                                     Employee Login
-                                </a> */}
-                                <Link to="/admin" className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center cursor-pointer">
+                                </a>
+                                {/* <Link to="/admin" className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center cursor-pointer">
                                     Employee Login
-                                </Link>
+                                </Link> */}
                             </li>
                             <li className="pt-2">
                                 <a
                                     href="javascript:void(0)"
                                     className="block w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-center cursor-pointer"
                                 >
-                                    Application Login
+                                    Candidate Login
                                 </a>
                             </li>
                         </ul>
@@ -111,12 +113,22 @@ const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex space-x-3">
-                    <Link to="/admin" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
-                        Employee Login
-                    </Link>
-                    <Link to="/admin/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
-                        Candidate Login
-                    </Link>
+                    {loggedUser ? (
+                        <a href="/admin-dashboard" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
+                            Go to Dashboard
+                        </a>
+                    ) : (
+                        <>
+                            <a href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
+                                Employee Login
+                            </a>
+                            <a href="/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
+                                Candidate Login
+                            </a>
+                        </>
+                    )}
+
+
                 </div>
             </div>
         </nav>

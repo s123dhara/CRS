@@ -13,12 +13,22 @@ import AuthLayout from '../../layout/Auth/AdminAuthLayout';
 import LoginForm from '../../components/Admin/Auth/LoginForm';
 import SignupForm from '../../components/Admin/Auth/SignupForm';
 import PublicOnlyRoute from '../PublicOnlyRoutes'; // 👈 use this instead of ProtectedRoute
+import { useAuth } from '../../context/AuthContext';
 
-export const AuthRoutes = () => (
-    <Route path="/admin" element={<AuthLayout />}>
-        <Route element={<PublicOnlyRoute />}>
+export const AuthRoutes = () => {
+    // const auth = useAuth();
+    // console.log(auth);
+
+
+    return (
+        
+        <Route path="/admin" element={<AuthLayout />}>
             <Route path="login" element={<LoginForm />} />
             <Route path="signup" element={<SignupForm />} />
+            {/* <Route element={<PublicOnlyRoute />}>
+            
+        </Route> */}
         </Route>
-    </Route>
-);
+    )
+    // );
+}
