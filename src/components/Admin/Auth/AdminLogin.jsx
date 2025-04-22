@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
-    const { login, loggedUser, accessToken } = useAuth();
+    const { login } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -51,18 +51,23 @@ export default function AdminLogin() {
         if (hasError) {
             return; // Stop submission if any error
         }
-
-        console.log({ email, password })
+        
         const response = await login({ email, password });
+
+        if (response.status && response.requiresTwoFactor) {
+            toast.success('Choose any authentication service to logged in');
+            navigate('/admin/2fa-auth');
+            return;
+        }
 
         if (response.status) {
             toast.success(response.data.message);
             navigate('/admin-dashboard', { replace: true });
         } else {
             toast.error(response.data.message);
-            navigate('/login', { replace: true });
+            navigate('/admin/login', { replace: true });
         }
-        console.log({ email, password, rememberMe });
+
     };
 
     return (
@@ -86,7 +91,7 @@ export default function AdminLogin() {
                                 }
                             }
                             className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-                            placeholder="admin@example.com"                            
+                            placeholder="admin@example.com"
                         />
                     </div>
                     {emailError && <p className="text-sm text-red-600 mt-1">{emailError}</p>}
@@ -105,7 +110,7 @@ export default function AdminLogin() {
                                 }
                             }
                             className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition"
-                            placeholder="••••••••"                            
+                            placeholder="••••••••"
                         />
                         <button
                             type="button"
