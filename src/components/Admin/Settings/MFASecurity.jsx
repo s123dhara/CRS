@@ -204,7 +204,7 @@ const MFASecurity = () => {
 
                 <button
                     onClick={handleSave}
-                    className="w-full mt-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    className="w-full mt-6 py-3 bg-violet-500 hover:bg-violet-600 text-white font-semibold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                     Save Changes
                 </button>
@@ -247,7 +247,7 @@ const MFASecurity = () => {
                                 </button>
                                 <button
                                     onClick={handleConfirm}
-                                    className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition duration-300 shadow-md"
+                                    className="px-5 py-2.5 bg-violet-500 hover:bg-violet-600 text-white font-medium rounded-xl  transition duration-300 shadow-md"
                                 >
                                     Confirm
                                 </button>

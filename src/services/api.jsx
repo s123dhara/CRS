@@ -46,6 +46,19 @@ const adminLogout = async () => {
     }
 }
 
+const adminForgotPassword = async (email) => {
+    try {
+        const { data } = await api.post('/auth/forgot-password', { email });
+        if (data.status) {
+            return { status: true, message: data.message };
+        } else {
+            return { status: false, message: "Something went wrong" }
+        }
+    } catch (error) {
+        return { status: false, message: "Something went wrong" }
+    }
+}
+
 
 const verifyAdminLoggedIn = async (accessToken) => {
     // accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE3NDQ1NzI3MTYsImV4cCI6MTc0NDU3MzYxNn0.oZMQ9b2Kv7ZnViGXVywajygDDLp8WD4SR9QaNS6GhMI`;
@@ -100,6 +113,6 @@ const init2fa = async (method, user) => {
     }
 }
 
-const BACKEND_API = { adminLogin, adminLogout, verifyAdminLoggedIn, enable2faAuth, disable2faAuth, verify2fa, init2fa };
+const BACKEND_API = { adminLogin, adminLogout, verifyAdminLoggedIn, enable2faAuth, disable2faAuth, verify2fa, init2fa, adminForgotPassword };
 
 export default BACKEND_API;

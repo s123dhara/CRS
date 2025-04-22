@@ -16,7 +16,7 @@ const Navbar = () => {
     return (
         <nav className="bg-white shadow-md py-4 relative z-10">
             <div className="container mx-auto flex justify-between items-center px-6">
-                <h1 className="text-2xl font-bold text-blue-600">CampusRecruit</h1>
+                <h1 className="text-2xl font-bold text-violet-600">CampusRecruit</h1>
 
                 {/* Mobile Menu Button */}
                 <button className="md:hidden text-gray-600 z-20" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
@@ -26,24 +26,24 @@ const Navbar = () => {
                 {/* Desktop Menu */}
                 <ul className="hidden md:flex space-x-6">
                     <li>
-                        <a href="javascript:void(0)" className="text-gray-700 hover:text-blue-600">
+                        <a href="/" className="text-gray-700 hover:text-violet-600">
                             Home
                         </a>
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="#"
                             onClick={() => handleScroll("features")}
-                            className="text-gray-700 hover:text-blue-600"
+                            className="text-gray-700 hover:text-violet-600"
                         >
                             Features
                         </a>
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0)"
+                            href="#"
                             onClick={() => handleScroll("footer")}
-                            className="text-gray-700 hover:text-blue-600"
+                            className="text-gray-700 hover:text-violet-600"
                         >
                             Contact
                         </a>
@@ -60,12 +60,12 @@ const Navbar = () => {
                     className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-20 transform transition-transform duration-300 ease-in-out md:hidden ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
                 >
                     <div className="p-6">
-                        <h2 className="text-xl font-bold text-blue-600 mb-6">CampusRecruit</h2>
+                        <h2 className="text-xl font-bold text-violet-600 mb-6">CampusRecruit</h2>
                         <ul className="space-y-4">
                             <li>
                                 <a
-                                    href="javascript:void(0)"
-                                    className="block text-gray-700 hover:text-blue-600 py-2"
+                                    href="/"
+                                    className="block text-gray-700 hover:text-violet-600 py-2"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     Home
@@ -73,8 +73,8 @@ const Navbar = () => {
                             </li>
                             <li>
                                 <a
-                                    href="javascript:void(0)"
-                                    className="block text-gray-700 hover:text-blue-600 py-2"
+                                    href="#"
+                                    className="block text-gray-700 hover:text-violet-600 py-2"
                                     onClick={() => handleScroll("features")}
                                 >
                                     Features
@@ -82,8 +82,8 @@ const Navbar = () => {
                             </li>
                             <li>
                                 <a
-                                    href="javascript:void(0)"
-                                    className="block text-gray-700 hover:text-blue-600 py-2"
+                                    href="#"
+                                    className="block text-gray-700 hover:text-violet-600 py-2"
                                     onClick={() => handleScroll("footer")}
                                 >
                                     Contact
@@ -91,8 +91,8 @@ const Navbar = () => {
                             </li>
                             <li className="pt-4">
                                 <a
-                                    href="javascript:void(0)"
-                                    className="block w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center"
+                                    href="/employee/login"
+                                    className="block w-full bg-violet-600 text-white px-4 py-2 rounded-md text-center"
                                 >
                                     Employee Login
                                 </a>
@@ -102,7 +102,7 @@ const Navbar = () => {
                             </li>
                             <li className="pt-2">
                                 <a
-                                    href="javascript:void(0)"
+                                    href="/login"
                                     className="block w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-center cursor-pointer"
                                 >
                                     Candidate Login
@@ -114,12 +114,12 @@ const Navbar = () => {
 
                 <div className="hidden md:flex space-x-3">
                     {loggedUser ? (
-                        <a href="/admin-dashboard" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
+                        <a href="/admin-dashboard" className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer">
                             Go to Dashboard
                         </a>
                     ) : (
                         <>
-                            <a href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
+                            <a href="/employee/login" className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer">
                                 Employee Login
                             </a>
                             <a href="/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">

@@ -17,11 +17,14 @@ import { SignIn } from '../pages/Admin/AuthPages/SignIn';
 import SignupForm from '../components/Admin/Auth/SignupForm';
 import AdminLogin from '../components/Admin/Auth/AdminLogin';
 import TwoFactorAuthFlow from '../components/Admin/Auth/TwofaAuth';
+import { ForgotPassword } from '../pages/User/AuthPages/ForgotPassword'
+import { ResetPassword } from '../pages/User/AuthPages/ResetPassword'
 
 
 //Pages 
 import Home from '../pages/Home';
 import AdminDashboard from '../pages/Admin/Dashboard/AdminDashboard';
+import { Settings } from '../pages/Admin/Settings/Settings';
 //Pages 
 
 //extra
@@ -30,7 +33,7 @@ import LoadingSpinner from '../components/ui/Spinner/LoadingSpinner';
 
 
 export default function AppRoutes() {
-    const { isAuthenticated, loading, isPartiallyAuthenticated } = useAuth(); 
+    const { isAuthenticated, loading, isPartiallyAuthenticated } = useAuth();
     const [showLoading, setShowLoading] = useState(true);
     // Add a minimum display time for the loading spinner
     useEffect(() => {
@@ -56,11 +59,11 @@ export default function AppRoutes() {
                 {!isAuthenticated && (
                     <>
                         {/* <Route path='/dashboard' element={<Dashboard />} /> */}
-
+                        <Route path='/forgot-password' element={<ForgotPassword />} />
                         <Route element={<AuthLayout />}>
                             <Route path="/login" element={<SignIn />} />
                             <Route path="/register" element={<SignupForm />} />
-
+                            <Route path="/register" element={<SignupForm />} />                            
 
                             <Route path='admin'>
                                 <Route path="login" element={<AdminLogin />} />
@@ -85,11 +88,11 @@ export default function AppRoutes() {
                     <Route path="/login" element={<Navigate to="/admin-dashboard" />} />
                     <Route path="/register" element={<Navigate to="/admin-dashboard" />} />
 
-                    {/* Admin Layout and Nested Admin Dashboard */}                   
+                    {/* Admin Layout and Nested Admin Dashboard */}
                     <Route element={<AdminLayout />}>
                         <Route path="/admin-dashboard" element={<AdminDashboard />} />
                         <Route path="admin">
-                            {/* <Route path="settings" element={<Settings />} /> */}
+                            <Route path="settings" element={<Settings />} />
                         </Route>
                     </Route>
                 </Route>

@@ -1,7 +1,7 @@
 const TestimonialCard = ({ name, feedback }) => (
     <div className="p-6 bg-white shadow-md rounded-md">
         <p className="text-gray-600 italic">"{feedback}"</p>
-        <h4 className="text-blue-600 font-semibold mt-4">- {name}</h4>
+        <h4 className="text-violet-600 font-semibold mt-4">- {name}</h4>
     </div>
 );
 

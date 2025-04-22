@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 
+import Notifications from '../../common/DropdownNotifications';
+import UserMenu from '../../common/DropdownProfile'
+import SearchModal from '../../common/ModalSearch'
+
 function Header({
     sidebarOpen,
     setSidebarOpen,
@@ -53,12 +57,12 @@ function Header({
                                     <path d="m13.314 11.9 2.393 2.393a.999.999 0 1 1-1.414 1.414L11.9 13.314a8.019 8.019 0 0 0 1.414-1.414Z" />
                                 </svg>
                             </button>
-                            {/* <SearchModal id="search-modal" searchId="search" modalOpen={searchModalOpen} setModalOpen={setSearchModalOpen} /> */}
+                            <SearchModal id="search-modal" searchId="search" modalOpen={searchModalOpen} setModalOpen={setSearchModalOpen} />
                         </div>
-                        {/* <Notifications align="right" />                                            */}
+                        <Notifications align="right" />
                         {/*  Divider */}
                         <hr className="w-px h-6 bg-gray-200 dark:bg-gray-700/60 border-none" />
-                        {/* <UserMenu align="right" /> */}
+                        <UserMenu align="right" />
 
                     </div>
 
