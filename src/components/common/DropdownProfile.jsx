@@ -137,13 +137,13 @@ function DropdownProfile({
         <p className="mb-4">Are you sure you want to log out?</p>
         <div className="flex justify-end">
           <button
-            className="bg-gray-300 hover:bg-gray-400 text-zinc-800 font-medium py-2 px-4 rounded mr-2"
+            className="bg-gray-300 hover:bg-gray-400 text-zinc-600 font-medium py-2 px-4 rounded mr-2 cursor-pointer"
             onClick={closeModal}
           >
             Cancel
           </button>
           <button
-            className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded"
+            className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded cursor-pointer"
             onClick={confirmLogout}
           >
             Log Out

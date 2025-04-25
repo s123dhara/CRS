@@ -14,8 +14,6 @@ export default function LoginForm() {
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-
-    const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const validateEmail = (value) => {

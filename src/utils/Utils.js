@@ -54,10 +54,30 @@ export const oklchToRGBA = (oklchColor) => {
   const tempDiv = document.createElement('div');
   tempDiv.style.color = oklchColor;
   document.body.appendChild(tempDiv);
-  
+
   // Get the computed style and convert to RGB
   const computedColor = window.getComputedStyle(tempDiv).color;
   document.body.removeChild(tempDiv);
-  
+
   return computedColor;
 };
+
+
+export const formatDateAndTime = (givenDate) => {
+  const date = new Date(givenDate);
+
+  const formatted = date.toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+
+  return formatted;
+
+}

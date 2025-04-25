@@ -19,6 +19,8 @@ import AdminLogin from '../components/Admin/Auth/AdminLogin';
 import TwoFactorAuthFlow from '../components/Admin/Auth/TwofaAuth';
 import { ForgotPassword } from '../pages/User/AuthPages/ForgotPassword'
 import { ResetPassword } from '../pages/User/AuthPages/ResetPassword'
+import { Users } from '../pages/Admin/Users';
+import UserAddPage from '../pages/Admin/Users/add';
 
 
 //Pages 
@@ -63,7 +65,7 @@ export default function AppRoutes() {
                         <Route element={<AuthLayout />}>
                             <Route path="/login" element={<SignIn />} />
                             <Route path="/register" element={<SignupForm />} />
-                            <Route path="/register" element={<SignupForm />} />                            
+                            <Route path="/register" element={<SignupForm />} />
 
                             <Route path='admin'>
                                 <Route path="login" element={<AdminLogin />} />
@@ -91,7 +93,10 @@ export default function AppRoutes() {
                     {/* Admin Layout and Nested Admin Dashboard */}
                     <Route element={<AdminLayout />}>
                         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
                         <Route path="admin">
+                            <Route path='users' element={<Users />} />
+                            <Route path='users/add' element={<UserAddPage />} />
                             <Route path="settings" element={<Settings />} />
                         </Route>
                     </Route>
