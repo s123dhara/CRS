@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { adminlogin } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -52,7 +52,7 @@ export default function AdminLogin() {
             return; // Stop submission if any error
         }
         
-        const response = await login({ email, password });
+        const response = await adminlogin({ email, password });
 
         if (response.status && response.requiresTwoFactor) {
             toast.success('Choose any authentication service to logged in');

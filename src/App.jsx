@@ -7,12 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // App All Routes
 import AppRoutes from './routes/AppRoutes';
+import Room from './pages/Room';
 
 
 export default function App() {
   return (
     <Router>
-      <AppRoutes />     
+      <AppRoutes />      
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </Router>
 

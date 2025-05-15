@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-
 // const { getAccessTokenFromContext } = useAuth();
 
 // Create API instance with base URL
@@ -20,6 +18,42 @@ const ENDPOINTS = {
     USER: '/user',
     ADMIN: '/admin'
 };
+
+const login = async (credentials) => {
+    try {
+        const result = await api.post('/auth/login', credentials);
+        return { status: true, data: result.data };
+    } catch (e) {
+        if (e.response && e.response.data) {
+            return { status: false, data: e.response.data };
+        }
+        return { status: false, data: { message: "Something went wrong. Please try again." } };
+    }
+}
+
+const recruiterlogin = async (credentials) => {
+    try {
+        const result = await api.post('/auth/recruiter/login', credentials);
+        return { status: true, data: result.data };
+    } catch (e) {
+        if (e.response && e.response.data) {
+            return { status: false, data: e.response.data };
+        }
+        return { status: false, data: { message: "Something went wrong. Please try again." } };
+    }
+}
+
+const recruiterSignup = async ({ email, password }) => {
+    try {
+        const { data } = await api.post(`/auth/recruiter/signup`, { email, password });
+        return {
+            status: data.status,
+            message: data.message
+        }
+    } catch (error) {
+
+    }
+}
 
 const adminLogin = async (credentials) => {
     try {
@@ -113,6 +147,6 @@ const init2fa = async (method, user) => {
     }
 }
 
-const BACKEND_API = { adminLogin, adminLogout, verifyAdminLoggedIn, enable2faAuth, disable2faAuth, verify2fa, init2fa, adminForgotPassword };
+const BACKEND_API = { login, adminLogin, adminLogout, verifyAdminLoggedIn, enable2faAuth, disable2faAuth, verify2fa, init2fa, adminForgotPassword, recruiterlogin, recruiterSignup };
 
 export default BACKEND_API;

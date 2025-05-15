@@ -53,8 +53,7 @@ export default function LoginForm() {
         if (hasError) {
             return; // Stop submission if any error
         }
-
-        console.log({ email, password })
+                
         const response = await login({ email, password });
 
         if(response.status && response.requiresTwoFactor) {
@@ -66,7 +65,7 @@ export default function LoginForm() {
 
         if (response.status) {
             toast.success(response.data.message);
-            navigate('/admin-dashboard', { replace: true });
+            navigate('/dashboard', { replace: true });
         } else {
             toast.error(response.data.message);
             navigate('/login', { replace: true });
@@ -180,7 +179,7 @@ export default function LoginForm() {
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
+                            className="cursor-pointer w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                         >
                             Sign in
                         </button>

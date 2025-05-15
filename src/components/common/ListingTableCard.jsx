@@ -117,7 +117,7 @@ function TableCard({ title, data, columns, rowsPerPage = 2 }) {
                         <button
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:opacity-50"
+                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:opacity-50 cursor-pointer"
                         >
                             Previous
                         </button>
@@ -125,7 +125,7 @@ function TableCard({ title, data, columns, rowsPerPage = 2 }) {
                             <button
                                 key={page}
                                 onClick={() => handlePageChange(page + 1)}
-                                className={`px-4 py-2 rounded-lg ${currentPage === page + 1 ? 'bg-violet-500 text-white' : 'bg-gray-200'}`}
+                                className={`px-4 py-2 rounded-lg ${currentPage === page + 1 ? 'bg-violet-500 text-white' : 'bg-gray-200'} cursor-pointer`}
                             >
                                 {page + 1}
                             </button>
@@ -133,7 +133,7 @@ function TableCard({ title, data, columns, rowsPerPage = 2 }) {
                         <button
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
-                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:opacity-50"
+                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:opacity-50 cursor-pointer"
                         >
                             Next
                         </button>

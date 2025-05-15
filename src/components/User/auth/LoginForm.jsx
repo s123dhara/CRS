@@ -68,7 +68,7 @@ export default function LoginForm() {
 
         if (response.status) {
             toast.success(response.data.message);
-            navigate('/admin-dashboard', { replace: true });
+            navigate('/dashboard', { replace: true });
         } else {
             toast.error(response.data.message);
             navigate('/login', { replace: true });

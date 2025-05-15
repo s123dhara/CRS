@@ -32,14 +32,23 @@ function DropdownProfile({
   const confirmLogout = async () => {
 
     const result = await logOut();
-    if(result.status) {
+    if (result.status) {
       toast.success('Succesfully Logged out');
-      closeModal();      
-      navigate('/admin/login');
-    }else {
-      closeModal();      
+      closeModal();
+
+      if (result.role == 'ADMIN') {
+        navigate('/admin/login');
+      } else if (result.role == 'RECRUITER') {
+        navigate('recuiter/login')
+      } else if (result.role == 'APPLICANT') {
+        navigate('/login')
+      } else {
+        navigate('/');
+      }
+    } else {
+      closeModal();
       navigate('/');
-    }    
+    }
   };
 
   // close on click outside

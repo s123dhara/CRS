@@ -114,22 +114,58 @@ const Navbar = () => {
 
                 <div className="hidden md:flex space-x-3">
                     {loggedUser ? (
-                        <a href="/admin-dashboard" className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer">
-                            Go to Dashboard
-                        </a>
+                        <>
+                            {loggedUser.role === 'ADMIN' && (
+                                <a
+                                    href="/admin-dashboard"
+                                    className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer"
+                                >
+                                    Go to Dashboard
+                                </a>
+                            )}
+                            {/* {loggedUser.role === 'EMPLOYEE' && (
+                                <a
+                                    href="/employee-dashboard"
+                                    className="bg-green-600 text-white px-4 py-2 rounded-md cursor-pointer"
+                                >
+                                    Go to Employee Dashboard
+                                </a>
+                            )} */}
+                            {loggedUser.role === 'APPLICANT' && (
+                                <a
+                                    href="/dashboard"
+                                    className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer"
+                                >
+                                    Go to Dashboard
+                                </a>
+                            )}
+                            {loggedUser.role === 'RECRUITER' && (
+                                <a
+                                    href="/employee-dashboard"
+                                    className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer"
+                                >
+                                    Go to Dashboard
+                                </a>
+                            )}
+                        </>
                     ) : (
                         <>
-                            <a href="/employee/login" className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer">
+                            <a
+                                href="/recruiter/login"
+                                className="bg-violet-600 text-white px-4 py-2 rounded-md cursor-pointer"
+                            >
                                 Employee Login
                             </a>
-                            <a href="/login" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer">
+                            <a
+                                href="/login"
+                                className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md cursor-pointer"
+                            >
                                 Candidate Login
                             </a>
                         </>
                     )}
-
-
                 </div>
+
             </div>
         </nav>
     )

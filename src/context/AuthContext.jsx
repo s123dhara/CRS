@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [accessToken, setAccessToken] = useState(null);
-    const [twofaAuth, setTwofaAuth] = useState(false);
+    const [twofaAuth, setTwofaAuth] = useState(false);    
 
 
 
@@ -41,7 +41,67 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             // setLoading(true); // ✅ Start spinner
+            const response = await BACKEND_API.login(credentials);
+
+            if (response.status && response.data.two_fa_auth_enabled) {
+                setAuthState(AUTH_STATES.PARTIAL_AUTH);
+                setTempUser(response.data.user);
+
+                return { status: true, requiresTwoFactor: true };
+            }
+
+            if (response.status) {
+                setLoading(true);
+                setAccessToken(response.data.token);
+                setLoggedUser(response.data.user);
+                return { status: response.status, data: response.data };
+            } else {
+                setAccessToken(null);
+                setLoggedUser(null);
+                return { status: response.status, data: response.data };
+            }
+        } catch (e) {
+            console.log("Login Error:", e);
+            return false;
+        } finally {
+            // setLoading(false); // ✅ Always stop spinner
+        }
+    };
+
+    const adminlogin = async (credentials) => {
+        try {
+            // setLoading(true); // ✅ Start spinner
             const response = await BACKEND_API.adminLogin(credentials);
+
+            if (response.status && response.data.two_fa_auth_enabled) {
+                setAuthState(AUTH_STATES.PARTIAL_AUTH);
+                setTempUser(response.data.user);
+
+                return { status: true, requiresTwoFactor: true };
+            }
+
+            if (response.status) {
+                setLoading(true);
+                setAccessToken(response.data.token);
+                setLoggedUser(response.data.user);
+                return { status: response.status, data: response.data };
+            } else {
+                setAccessToken(null);
+                setLoggedUser(null);
+                return { status: response.status, data: response.data };
+            }
+        } catch (e) {
+            console.log("Login Error:", e);
+            return false;
+        } finally {
+            // setLoading(false); // ✅ Always stop spinner
+        }
+    };
+
+    const recruiterlogin = async (credentials) => {
+        try {
+            // setLoading(true); // ✅ Start spinner
+            const response = await BACKEND_API.recruiterlogin(credentials);
 
             if (response.status && response.data.two_fa_auth_enabled) {
                 setAuthState(AUTH_STATES.PARTIAL_AUTH);
@@ -89,51 +149,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Admin login
-    // const adminLogin = async (credentials) => {
-    //     try {
-    //         setLoading(true);
-    //         setError(null);
-    //         const { data } = await api.post('', credentials);
-
-    //         if (data.success && data.data && data.data[0]?.token) {
-    //             localStorage.setItem(TOKEN_KEYS.ADMIN, data.data[0].token);
-    //             setAdmin(data.data);
-    //             return { success: true, data };
-    //         } else {
-    //             throw new Error('Invalid admin response from server');
-    //         }
-    //     } catch (err) {
-    //         return handleError(err);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // Check admin authentication
-    // const checkAdmin = async () => {
-    //     const token = localStorage.getItem(TOKEN_KEYS.ADMIN);
-    //     if (!token) return;
-
-    //     try {
-    //         setLoading(true);
-    //         const { data } = await api.get(ENDPOINTS.ADMIN, createAuthHeader(token));
-    //         if (data.success && data.data) {
-    //             setAdmin(data);
-    //         } else {
-    //             // Clear invalid admin session
-    //             localStorage.removeItem(TOKEN_KEYS.ADMIN);
-    //             setAdmin(null);
-    //         }
-    //     } catch (err) {
-    //         localStorage.removeItem(TOKEN_KEYS.ADMIN);
-    //         setAdmin(null);
-    //         console.error('Admin verification failed:', err);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     const enable2faAuth = async (MultifactorAuth, password) => {
         const result = await BACKEND_API.enable2faAuth(MultifactorAuth, password);
         if (result.status) {
@@ -151,12 +166,12 @@ export const AuthProvider = ({ children }) => {
         return result.data;
     }
 
-    const verifyAdminLoggedIn = async () => {
+    const verifyAdminLoggedIn = async (accessToken) => {
         try {
-            const result = await BACKEND_API.verifyAdminLoggedIn(getAccessTokenFromContext());
+            const result = await BACKEND_API.verifyAdminLoggedIn(accessToken);
 
-            if (result?.status && result.data?.isAuthenticated) {
-                setAuthState(AUTH_STATES.FULLY_AUTHENTICATED);
+            if (result?.status && result.data?.isAuthenticated) {                
+                setAuthState(AUTH_STATES.FULLY_AUTHENTICATED);                
                 setAccessToken(result.data.token);
                 setLoggedUser(result.data.user);
             } else {
@@ -168,13 +183,7 @@ export const AuthProvider = ({ children }) => {
             setLoggedUser(null);
         } finally {
             setLoading(false);
-        }
-
-        // if(setAccessToken != null) {
-        //     setLoggedUser({email : "sup"});
-        // }else {
-        //     setLoggedUser(null);
-        // }
+        }        
     }
 
     const verify2fa = async (code, method) => {
@@ -214,16 +223,14 @@ export const AuthProvider = ({ children }) => {
     const logOut = async () => {
         try {
             // await axios.post(`http://localhost:8000/auth/admin/logout`, {}, { withCredentials: true });
-            const result = await BACKEND_API.adminLogout();
-            console.log(result);
-
-            
+            const result = await BACKEND_API.adminLogout();                
             if(result.status) {
                 setAuthState(AUTH_STATES.LOGGED_OUT);
+                let role = loggedUser.role;
                 setLoggedUser(null);
                 setLoading(true);
 
-                return {status : true, message : result.message};
+                return {status : true, message : result.message, role };
             }
             // window.location.href = "/login"; // Redirect to login
         } catch (error) {
@@ -277,11 +284,9 @@ export const AuthProvider = ({ children }) => {
         error,
         loading,
         login,
+        adminlogin,
         signUp,
-        // adminLogin,
-        logOut,
-        // adminLogOut,
-        // checkUser,
+        logOut,    
         verifyAdminLoggedIn,
         isAuthenticated: !!accessToken,
         isAdmin: !!admin,
@@ -294,7 +299,8 @@ export const AuthProvider = ({ children }) => {
         verify2fa,
         init2fa,
         tempUser,
-        isPartiallyAuthenticated: authState == AUTH_STATES.PARTIAL_AUTH
+        isPartiallyAuthenticated: authState == AUTH_STATES.PARTIAL_AUTH,        
+        recruiterlogin
     };
 
     console.log(value);
